@@ -13,6 +13,11 @@
 
 <kbd>M-x</kbd> <code>package-install</code> <kbd>Return</kbd> <code>asdf-vm</code>
 
+# TODO
+
+- Testing
+- Add to Melpa
+
 # Author
 
 Delon Newman <contact@delonnewman.name>
