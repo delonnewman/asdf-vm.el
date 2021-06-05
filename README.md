@@ -5,8 +5,8 @@
 # Synopsis
 
 ```emacs-lisp
-	(require 'asdf-vm)
-	(asdf-vm-init)
+(require 'asdf-vm)
+(asdf-vm-init)
 ```
 
 # Installation
