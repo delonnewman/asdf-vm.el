@@ -11,7 +11,7 @@
 
 # Installation
 
-<code>M-x</code> package-install <code>Return</code> asdf-vm
+<kbd>M-x</kbd> <code>package-install</code> <kbd>Return</kbd> <code>asdf-vm</code>
 
 # Author
 
