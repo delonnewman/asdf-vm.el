@@ -1,5 +1,7 @@
 ;;; asdf-vm.el --- Integrate asdf-vm with Emacs
 
+;;; Version: 0.1.0
+
 ;; Copyright (C) 2021 Delon Newman
 
 ;; Author: Delon Newman
@@ -35,11 +37,33 @@
   :group 'tools
   :link '(url-link :tag "GitHub" "https://github.com/delonnewman/asdf-vm.el"))
 
-(defvar asdf-vm-local-tool-versions-file ".tool-versions")
-(defvar asdf-vm-home-tool-versions-file "~/.tool-versions")
-(defvar asdf-vm-installs-path (concat (getenv "HOME") "/.asdf/installs"))
-(defvar asdf-vm-shims-path (concat (getenv "HOME") "/.asdf/shims"))
-(defvar asdf-vm-path-seperator ":")
+(defcustom asdf-vm-local-tool-versions-file ".tool-versions"
+  "The 'local' .tool-versions file."
+  :type 'string
+  :group 'asdf-vm)
+
+(defcustom asdf-vm-home-tool-versions-file "~/.tool-versions"
+  "The 'home' .tool-versions file."
+  :type 'string
+  :group 'asdf-vm)
+
+(defcustom asdf-vm-installs-path (concat (getenv "HOME") "/.asdf/installs")
+  "The path for asdf installs."
+  :type 'string
+  :group 'adsf-vm)
+
+(defcustom asdf-vm-shims-path (concat (getenv "HOME") "/.asdf/shims")
+  "The path for asdf shims."
+  :type 'string
+  :group 'asdf-vm)
+
+(defvar asdf-vm-path-seperator ":"
+  "The path seperator for PATH environment variable."
+  :type 'string
+  :group 'asdf-vm)
+
+(defvar asdf-vm--current-tools-listing nil
+  "Current active tools.")
 
 (defun asdf-vm--slurp (file-path)
   "Read the contents of the FILE-PATH to a string."
@@ -91,17 +115,14 @@ be constructed from that file.  Otherwise it will look for ~/.tool-versions."
   "Return a bin path list for the TOOL-LIST."
   (mapcar #'asdf-vm--tool-bin-path tool-list))
 
-;(setq tool (asdf--make-tool 'ruby "3.0.1"))
-;(asdf--tool-name tool)
-;(asdf--tool-version tool)
-
 (defun asdf-vm--list-join (list sep)
   "Join the LIST with the string SEP."
   (cl-reduce (lambda (str path) (concat str sep path)) list))
 
 (defun asdf-vm-init ()
   "Initialize the asdf-vm environment."
-  (let ((paths (cons asdf-vm-shims-path (asdf-vm--tool-bin-path-listing (asdf-vm-tool-versions))))
+  (setq asdf-vm--current-tools-listing (asdf-vm-tool-versions))
+  (let ((paths (cons asdf-vm-shims-path (asdf-vm--tool-bin-path-listing asdf-vm--current-tools-listing)))
 	(sep asdf-vm-path-seperator))
     (setenv "PATH" (concat (asdf-vm--list-join paths sep) sep (getenv "PATH")))
     (setq exec-path (append paths exec-path))))
