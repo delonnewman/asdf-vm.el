@@ -16,7 +16,7 @@
 # TODO
 
 - Testing
-- Add to Melpa
+- Submit to Melpa
 
 # Author
 
