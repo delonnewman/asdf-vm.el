@@ -24,7 +24,7 @@
 
 ;;; Commentary:
 
-;; M-x asdf-vm-init initializes the asdf-vm enviroment
+;; M-x asdf-vm-init initializes the asdf-vm environment
 
 ;;; Code:
 
@@ -77,9 +77,10 @@
   "Return an alist of all tool versions for this asdf-vm enviroment.
 If there is a .tool-versions file in the current directory the list
 be constructed from that file.  Otherwise it will look for ~/.tool-versions."
-  (if (file-exists-p asdf-vm-local-tool-versions-file)
-      (asdf-vm-tool-versions-from-file asdf-vm-local-tool-versions-file)
-    (asdf-vm-tool-versions-from-file asdf-vm-home-tool-versions-file)))
+  (let ((versions-file (cl-find-if #'file-exists-p (list asdf-vm-local-tool-versions-file asdf-vm-home-tool-versions-file))))
+    (if versions-file
+        (asdf-vm-tool-versions-from-file versions-file)
+      '())))
 
 (defun asdf-vm--tool-bin-path (tool)
   "Return the bin path for the TOOL."
